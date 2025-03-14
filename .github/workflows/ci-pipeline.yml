@@ -52,7 +52,7 @@ jobs:
         SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
     
   dast:
-    needs: [test, sonarqube]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
