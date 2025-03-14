@@ -37,7 +37,7 @@ jobs:
 
   sonarqube:
     needs: test
-    if: false 
+    if: true 
     # Disable SonarQube scan for now
     runs-on: ubuntu-latest
     steps:
