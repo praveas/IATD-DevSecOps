@@ -231,6 +231,8 @@ jobs:
           cosign sign --yes ${IMAGE}
 
   deploy:
+    needs: build
+    if: true
     runs-on: ubuntu-latest
     steps:
     - name: Install Cosign
