@@ -2,7 +2,8 @@ import re
 import jsonschema
 import jwt
 
-from config import db, vuln_app, INVALID_TOKEN, APPLICATION_JSON
+from config import db, vuln_app
+from constants import APPLICATION_JSON, INVALID_TOKEN
 from api_views.json_schemas import register_user_schema, login_user_schema, update_email_schema
 from flask import jsonify, Response, request, json
 from models.user_model import User

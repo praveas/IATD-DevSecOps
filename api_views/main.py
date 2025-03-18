@@ -3,7 +3,7 @@ from flask import Response
 from models.user_model import User
 from app import vuln
 
-APPLICATION_JSON = "application/json"
+from constants import APPLICATION_JSON
 
 def populate_db():
     db.drop_all()

@@ -1,7 +1,8 @@
 import jsonschema
 
 from api_views.users import token_validator
-from config import db, APPLICATION_JSON, INVALID_TOKEN
+from config import db
+from constants import APPLICATION_JSON, INVALID_TOKEN
 from api_views.json_schemas import add_book_schema
 from flask import jsonify, Response, request, json
 from models.user_model import User
