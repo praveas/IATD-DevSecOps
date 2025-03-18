@@ -16,3 +16,5 @@ db = SQLAlchemy(vuln_app.app)
 vuln_conn = sqlite3.connect(os.path.join(vuln_app.app.root_path, 'database/database.db') , check_same_thread=False)
 
 vuln_app.add_api('openapi3.yml')
+APPLICATION_JSON = "application/json"
+INVALID_TOKEN = "Invalid token"
