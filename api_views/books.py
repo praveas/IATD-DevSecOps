@@ -40,11 +40,11 @@ def add_new_book():
                             user_id=user.id)
             db.session.add(new_book)
             db.session.commit()
-            response_Object = {
+            response_object = {
                 'status': 'success',
                 'message': 'Book has been added.'
             }
-            return Response(json.dumps(response_Object), 200, mimetype=APPLICATION_JSON)
+            return Response(json.dumps(response_object), 200, mimetype=APPLICATION_JSON)
 
 def get_by_title(book_title):
     resp = token_validator(request.headers.get('Authorization'))
@@ -56,23 +56,23 @@ def get_by_title(book_title):
         if vuln:  # Broken Object Level Authorization
             book = Book.query.filter_by(book_title=str(book_title)).first()
             if book:
-                response_Object = {
+                response_object = {
                     'book_title': book.book_title,
                     'secret': book.secret_content,
                     'owner': book.user.username
                 }
-                return Response(json.dumps(response_Object), 200, mimetype=APPLICATION_JSON)
+                return Response(json.dumps(response_object), 200, mimetype=APPLICATION_JSON)
             else:
                 return Response(error_message_helper("Book not found!"), 404, mimetype=APPLICATION_JSON)
         else:
             user = User.query.filter_by(username=resp).first()
             book = Book.query.filter_by(user=user, book_title=str(book_title)).first()
             if book:
-                response_Object = {
+                response_object = {
                     'book_title': book.book_title,
                     'secret': book.secret_content,
                     'owner': book.user.username
                 }
-                return Response(json.dumps(response_Object), 200, mimetype=APPLICATION_JSON)
+                return Response(json.dumps(response_object), 200, mimetype=APPLICATION_JSON)
             else:
                 return Response(error_message_helper("Book not found!"), 404, mimetype=APPLICATION_JSON)
