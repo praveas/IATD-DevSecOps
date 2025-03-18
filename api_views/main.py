@@ -1,5 +1,4 @@
 from flask import Response
-from app import db  # Importing db from the app module
 
 from models.user_model import User
 from app import vuln
