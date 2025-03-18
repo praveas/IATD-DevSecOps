@@ -119,7 +119,7 @@ jobs:
           format: openapi
           target: /zap/wrk/openapi_specs/openapi3.yml
           rules_file_name: .zap/rules.tsv
-          cmd_options: '-a -c /zap/wrk/.zap/rules.tsv --timeout 60' # Increase timeout to 60 seconds
+          cmd_options: '-a -c /zap/wrk/.zap/rules.tsv -T 1' # Increase timeout to 1 minute
           fail_action: false
           allow_issue_writing: false
 
