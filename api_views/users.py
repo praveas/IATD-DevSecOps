@@ -147,33 +147,42 @@ def update_email():
 def update_password():
     request_data = request.get_json()
     resp = token_validator(request.headers.get('Authorization'))
-    if "expired" in resp:
+
+    if not validate_token_response(resp):
         return Response(error_message_helper(resp), 401, mimetype=APPLICATION_JSON)
-    elif INVALID_TOKEN in resp:
-        return Response(error_message_helper(resp), 401, mimetype=APPLICATION_JSON)
+
+    if not request_data.get('password'):
+        return Response(error_message_helper("Malformed Data"), 400, mimetype=APPLICATION_JSON)
+
+    if not is_password_strong(request_data.get('password')):
+        return Response(error_message_helper("Password does not meet security requirements."), 400, mimetype=APPLICATION_JSON)
+
+    hashed_password = generate_password_hash(request_data.get('password'))
+    return process_password_update(request_data, resp, hashed_password)
+
+
+def validate_token_response(resp):
+    if "expired" in resp or INVALID_TOKEN in resp:
+        return False
+    return True
+
+
+def process_password_update(request_data, resp, hashed_password):
+    if vuln:  # Unauthorized update of password of another user
+        user = User.query.filter_by(username=request_data.get('username')).first()
+        if not user:
+            return Response(error_message_helper("User Not Found"), 400, mimetype=APPLICATION_JSON)
     else:
-        if request_data.get('password'):
-            if not is_password_strong(request_data.get('password')):
-                return Response(error_message_helper("Password does not meet security requirements."), 400, mimetype=APPLICATION_JSON)
-            hashed_password = generate_password_hash(request_data.get('password'))
-            if vuln:  # Unauthorized update of password of another user
-                user = User.query.filter_by(username=request_data.get('username')).first()
-                if user:
-                    user.password = hashed_password
-                    db.session.commit()
-                else:
-                    return Response(error_message_helper("User Not Found"), 400, mimetype=APPLICATION_JSON)
-            else:
-                user = User.query.filter_by(username=resp).first()
-                user.password = hashed_password
-                db.session.commit()
-            response_object = {
-                'status': 'success',
-                'Password': 'Updated.'
-            }
-            return Response(json.dumps(response_object), 204, mimetype=APPLICATION_JSON)
-        else:
-            return Response(error_message_helper("Malformed Data"), 400, mimetype=APPLICATION_JSON)
+        user = User.query.filter_by(username=resp).first()
+
+    user.password = hashed_password
+    db.session.commit()
+
+    response_object = {
+        'status': 'success',
+        'Password': 'Updated.'
+    }
+    return Response(json.dumps(response_object), 204, mimetype=APPLICATION_JSON)
 
 def delete_user():
     request_data = request.get_json()
