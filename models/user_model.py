@@ -4,8 +4,8 @@ from sqlalchemy.orm import relationship
 from config import db, vuln_app, vuln_conn
 from app import vuln, alive
 from models.books_model import Book
-from random import randrange
-from sqlalchemy.sql import text
+import secrets
+# Removed unused import
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -29,8 +29,8 @@ class User(db.Model):
     def encode_auth_token(self, user_id):
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=alive),
-                'iat': datetime.datetime.utcnow(),
+                'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=0, seconds=alive),
+                'iat': datetime.datetime.now(datetime.timezone.utc),
                 'sub': user_id
             }
             return jwt.encode(
@@ -70,9 +70,9 @@ class User(db.Model):
     @staticmethod
     def get_user(username):
         if vuln: 
-            user_query = f"SELECT * FROM users WHERE username = '{username}'"
+            user_query = "SELECT * FROM users WHERE username = :username"
             print(user_query)
-            query = vuln_conn.cursor().executescript(user_query)
+            query = vuln_conn.cursor().execute(user_query, {"username": username})
             ret = query.fetchone()
             if ret:
                 fin_query = '{"username": "%s", "email": "%s"}' % (ret[1], ret[3])
@@ -85,7 +85,7 @@ class User(db.Model):
     @staticmethod
     def register_user(username, password, email, admin=False):
         new_user = User(username=username, password=password, email=email, admin=admin)
-        randomint = str(randrange(100))
+        randomint = str(secrets.randbelow(100))
         new_user.books = [Book(book_title="bookTitle" + randomint, secret_content="secret for bookTitle" + randomint)]
         db.session.add(new_user)
         db.session.commit()

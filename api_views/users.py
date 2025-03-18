@@ -152,7 +152,7 @@ def update_password():
     elif INVALID_TOKEN in resp:
         return Response(error_message_helper(resp), 401, mimetype=APPLICATION_JSON)
     else:
-        if request_data.get('password')):
+        if request_data.get('password'):
             if not is_password_strong(request_data.get('password')):
                 return Response(error_message_helper("Password does not meet security requirements."), 400, mimetype=APPLICATION_JSON)
             hashed_password = generate_password_hash(request_data.get('password'))

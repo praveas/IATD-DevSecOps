@@ -1,8 +1,8 @@
-
 import os
 import connexion
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3  
+from constants import APPLICATION_JSON, INVALID_TOKEN
 
 vuln_app = connexion.App(__name__, specification_dir='./openapi_specs')
 
