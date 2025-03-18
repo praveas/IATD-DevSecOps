@@ -1,6 +1,7 @@
 import re
 import jsonschema
 import jwt
+from werkzeug.security import generate_password_hash
 
 from config import db, vuln_app
 from constants import APPLICATION_JSON, INVALID_TOKEN
@@ -151,17 +152,20 @@ def update_password():
     elif INVALID_TOKEN in resp:
         return Response(error_message_helper(resp), 401, mimetype=APPLICATION_JSON)
     else:
-        if request_data.get('password'):
+        if request_data.get('password')):
+            if not is_password_strong(request_data.get('password')):
+                return Response(error_message_helper("Password does not meet security requirements."), 400, mimetype=APPLICATION_JSON)
+            hashed_password = generate_password_hash(request_data.get('password'))
             if vuln:  # Unauthorized update of password of another user
                 user = User.query.filter_by(username=request_data.get('username')).first()
                 if user:
-                    user.password = request_data.get('password')
+                    user.password = hashed_password
                     db.session.commit()
                 else:
                     return Response(error_message_helper("User Not Found"), 400, mimetype=APPLICATION_JSON)
             else:
                 user = User.query.filter_by(username=resp).first()
-                user.password = request_data.get('password')
+                user.password = hashed_password
                 db.session.commit()
             response_object = {
                 'status': 'success',
@@ -191,3 +195,16 @@ def delete_user():
                 return Response(error_message_helper("User not found!"), 404, mimetype=APPLICATION_JSON)
         else:
             return Response(error_message_helper("Only Admins may delete users!"), 401, mimetype=APPLICATION_JSON)
+
+def is_password_strong(password):
+    if len(password) < 8:
+        return False
+    if not any(char.isdigit() for char in password):
+        return False
+    if not any(char.isupper() for char in password):
+        return False
+    if not any(char.islower() for char in password):
+        return False
+    if not any(char in "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~" for char in password):
+        return False
+    return True
