@@ -34,6 +34,10 @@ jobs:
         with:
           name: test-results
           path: junit/test-results.xml
+      - name: Debug Threat Model Directory
+        run: |
+          echo "Listing contents of threat-model directory:"
+          ls -l $GITHUB_WORKSPACE/threat-model
 
   sonarqube:
     needs: test
