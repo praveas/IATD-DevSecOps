@@ -180,7 +180,7 @@ def process_password_update(request_data, resp, hashed_password):
 
     response_object = {
         'status': 'success',
-        'Password': 'Updated.'
+        'message': 'Password updated successfully.'
     }
     return Response(json.dumps(response_object), 204, mimetype=APPLICATION_JSON)
 
