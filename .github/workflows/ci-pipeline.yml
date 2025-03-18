@@ -66,7 +66,7 @@ jobs:
     
   dast:
     needs: [test]
-    if: false
+    if: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -155,7 +155,7 @@ jobs:
             path: ${{ steps.image-scan.outputs.json }}
   
   security_gate:
-    needs: [test, sonarqube, image-scan]
+    needs: [test, sonarqube, dast, image-scan]
     if: true
     runs-on: ubuntu-latest
     steps:
