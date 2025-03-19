@@ -270,11 +270,23 @@ jobs:
         with:
           name: image-report
           path: ${{github.workspace}}
-      - name: Upload threat model report
-        uses: actions/upload-artifact@v4
-        with:
-          name: threat-model
-          path:  ${{github.workspace}}/threat-model/ci-pipeline.json 
+      - name: Upload Week5 Report
+        run: |
+          if [ -z "$IMAGE" ]; then
+            echo "Error: IMAGE variable is empty!"
+            exit 1
+          fi
+          
+      - name: Verify threat model file exists
+        run: |
+          if [ ! -f "$GITHUB_WORKSPACE/threat-model/ci-pipeline.json" ]; then
+            echo "Error: Threat model file not found!"
+            exit 1
+          fi
+      - name: Debug Threat Model Directory
+        run: |
+          echo "Listing contents of threat-model directory:"
+          ls -l $GITHUB_WORKSPACE/threat-model
       - name: Upload reports
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -292,7 +304,7 @@ jobs:
           IMAGE_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/results.json https://devsecops-ver.azurewebsites.net/api/week4-image-report)
           echo "Image report upload: $IMAGE_RESPONSE"
             
-          WEEK5_RESPONSE=$(curl -X POST  -H "Authorization: Bearer $AZURE_ACCESS_TOKEN"  -d "$IMAGE" https://devsecops-ver.azurewebsites.net/api/week5-report)
+          WEEK5_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "$IMAGE" https://devsecops-ver.azurewebsites.net/api/week5-report)
           echo "Week5 report upload: $WEEK5_RESPONSE"
 
           MODEL_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/threat-model/ci-pipeline.json https://devsecops-ver.azurewebsites.net/api/week6-report)
