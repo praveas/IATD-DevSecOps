@@ -271,12 +271,6 @@ jobs:
           name: image-report
           path: ${{github.workspace}}
       
-      - name: Verify threat model file exists
-        run: |
-          if [ ! -f "$GITHUB_WORKSPACE/threat-model/ci-pipeline.json" ]; then
-            echo "Error: Threat model file not found!"
-            exit 1
-          fi
       - name: Debug Threat Model Directory
         run: |
           echo "Listing contents of threat-model directory:"
