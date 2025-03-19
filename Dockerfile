@@ -16,7 +16,7 @@ RUN apk --update add bash \
 WORKDIR /vampi
 COPY --from=builder /usr/local/lib /usr/local/lib
 COPY --from=builder /usr/local/bin /usr/local/bin
-COPY *.py /vampi/app.py
+COPY *.py /vampi/*.py
 COPY api_views /vampi/api_views
 COPY models /vampi/models
 COPY openapi_specs /vampi/openapi_specs
