@@ -191,6 +191,7 @@ jobs:
         ZAP_RESULT_HIGH=$(cat report_json.json | jq -r '.site[].alerts[] | select(.riskdesc | startswith("High")) | .name' | wc -l)
         if [ $ZAP_RESULT_HIGH -gt 5 ]; then
           echo "Zap scan has high severity vulnerabilities"
+          ls -lah
           cat report_json.json
           exit 1
         else
