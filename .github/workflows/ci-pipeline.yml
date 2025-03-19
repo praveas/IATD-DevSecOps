@@ -270,11 +270,15 @@ jobs:
         with:
           name: image-report
           path: ${{github.workspace}}
-      - name: Download threat model report
-        uses: actions/download-artifact@v4
+      - name: Upload threat model report
+        uses: actions/upload-artifact@v4
         with:
           name: threat-model
-          path: ${{ github.workspace }}/threat-model
+          path: threat-model/ci-pipeline.json
+      - name: Check threat model file
+        run: |
+          ls -lah threat-model/
+          cat threat-model/ci-pipeline.json    
       - name: Upload reports
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
