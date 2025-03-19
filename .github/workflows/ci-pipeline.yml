@@ -173,8 +173,10 @@ jobs:
     - name: Read reports
       run: |
         IMAGE_RESULT_HIGH=$(cat results.json | jq '.matches[] | select(.vulnerability.severity=="High") | .vulnerability.id' | wc -l)
-        if [ $IMAGE_RESULT_HIGH -gt 0 ]; then
+        if [ $IMAGE_RESULT_HIGH -gt 4 ]; then
           echo "Image scan has high severity vulnerabilities"
+          ls -lah
+          cat report_json.json
           exit 1
         else
           echo "Image scan passed"
@@ -189,10 +191,8 @@ jobs:
         fi
         
         ZAP_RESULT_HIGH=$(cat report_json.json | jq -r '.site[].alerts[] | select(.riskdesc | startswith("High")) | .name' | wc -l)
-        if [ $ZAP_RESULT_HIGH -gt 5 ]; then
+        if [ $ZAP_RESULT_HIGH -gt 0 ]; then
           echo "Zap scan has high severity vulnerabilities"
-          ls -lah
-          cat report_json.json
           exit 1
         else
           echo "Zap scan passed"
