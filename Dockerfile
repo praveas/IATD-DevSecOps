@@ -35,7 +35,7 @@ ENV tokentimetolive=60
 USER vampiuser
 
 # Expose the application port
-EXPOSE 443
+EXPOSE 5000
 
 # Set the entrypoint and command
 ENTRYPOINT ["python"]
