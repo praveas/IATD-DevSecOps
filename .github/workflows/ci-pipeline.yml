@@ -274,7 +274,6 @@ jobs:
         run: |
           if [ -z "$IMAGE" ]; then
             echo "Error: IMAGE variable is empty!"
-            echo ${{ secrets.DOCKERHUB_USERNAME }}
             exit 1
           fi
           
@@ -305,8 +304,8 @@ jobs:
           IMAGE_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/results.json https://devsecops-ver.azurewebsites.net/api/week4-image-report)
           echo "Image report upload: $IMAGE_RESPONSE"
             
-          WEEK5_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "$IMAGE" https://devsecops-ver.azurewebsites.net/api/week5-report)
-          echo "Week5 report upload: $WEEK5_RESPONSE"
+          # WEEK5_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "$IMAGE" https://devsecops-ver.azurewebsites.net/api/week5-report)
+          # echo "Week5 report upload: $WEEK5_RESPONSE"
 
           MODEL_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/threat-model/ci-pipeline.json https://devsecops-ver.azurewebsites.net/api/week6-report)
           echo "Model report upload: $MODEL_RESPONSE"
