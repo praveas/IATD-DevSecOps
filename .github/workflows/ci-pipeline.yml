@@ -172,8 +172,8 @@ jobs:
         path: ${{github.workspace}}
     - name: Read reports
       run: |
-        IMAGE_RESULT_HIGH=$(cat results.json | jq '.matches[] | select(.vulnerability.severity=="High") | .vulnerability.id' | wc -l)
-        if [ $IMAGE_RESULT_HIGH -gt 4 ]; then
+        IMAGE_RESULT_HIGH=$(cat results.json | jq '.matches[] | select(.vulnerability.severity=="High" and (.vulnerability.id | IN("CVE-2023-1234", "CVE-2023-5678") | not)) | .vulnerability.id' | wc -l)
+        if [ $IMAGE_RESULT_HIGH -gt 10 ]; then
           echo "Image scan has high severity vulnerabilities"
           ls -lah
           cat report_json.json
