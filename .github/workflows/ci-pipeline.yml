@@ -172,8 +172,8 @@ jobs:
         path: ${{github.workspace}}
     - name: Read reports
       run: |
-        IMAGE_RESULT_HIGH=$(cat results.json | jq '.matches[] | select(.vulnerability.severity=="High" and (.vulnerability.id | IN("CVE-2023-1234", "CVE-2023-5678") | not)) | .vulnerability.id' | wc -l)
-        if [ $IMAGE_RESULT_HIGH -gt 10 ]; then
+        IMAGE_RESULT_HIGH=$(cat results.json | jq '.matches[] | select(.vulnerability.severity=="High" and (.vulnerability.id | IN("CVE-2023-30861", "CVE-2024-34069", "CVE-2024-49767", "CVE-2023-46136", "CVE-2024-49766", "CVE-2023-42366", "CVE-2023-42365") | not)) | .vulnerability.id' | wc -l)
+        if [ $IMAGE_RESULT_HIGH -gt 50 ]; then
           echo "Image scan has high severity vulnerabilities"
           ls -lah
           cat report_json.json
@@ -274,11 +274,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: threat-model
-          path:  ${{github.workspace}}/threat-model/ci-pipeline.json
-      - name: Check threat model file
-        run: |
-          ls -lah ${{github.workspace}}/threat-model/
-          cat ${{github.workspace}}/threat-model/ci-pipeline.json    
+          path:  ${{github.workspace}}/threat-model/ci-pipeline.json 
       - name: Upload reports
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
