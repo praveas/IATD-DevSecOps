@@ -274,11 +274,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: threat-model
-          path: threat-model/ci-pipeline.json
+          path:  ${{github.workspace}}/threat-model/ci-pipeline.json
       - name: Check threat model file
         run: |
-          ls -lah threat-model/
-          cat threat-model/ci-pipeline.json    
+          ls -lah ${{github.workspace}}/threat-model/
+          cat ${{github.workspace}}/threat-model/ci-pipeline.json    
       - name: Upload reports
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
