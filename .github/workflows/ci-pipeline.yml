@@ -271,10 +271,6 @@ jobs:
           name: image-report
           path: ${{github.workspace}}
       
-      - name: Debug Threat Model Directory
-        run: |
-          echo "Listing contents of threat-model directory:"
-          ls -l $GITHUB_WORKSPACE/threat-model
       - name: Upload reports
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
