@@ -19,9 +19,11 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY app.py /vampi/app.py
 COPY config.py /vampi/config.py
 COPY constants.py /vampi/constants.py
+COPY api_tests.py /vampi/api_tests.py
 COPY api_views /vampi/api_views
 COPY models /vampi/models
 COPY openapi_specs /vampi/openapi_specs
+COPY database /vampi/database
 
 # Set environment variables
 ENV vulnerable=1
