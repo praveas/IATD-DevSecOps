@@ -24,6 +24,7 @@ COPY api_views /vampi/api_views
 COPY models /vampi/models
 COPY openapi_specs /vampi/openapi_specs
 COPY database /vampi/database
+COPY threat-model /vampi/threat-model
 
 RUN chown -R vampiuser:vampiuser /vampi
 
