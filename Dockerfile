@@ -25,6 +25,8 @@ COPY models /vampi/models
 COPY openapi_specs /vampi/openapi_specs
 COPY database /vampi/database
 
+RUN chown -R vampiuser:vampiuser /vampi
+
 # Set environment variables
 ENV vulnerable=1
 ENV tokentimetolive=60
