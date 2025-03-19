@@ -203,7 +203,7 @@ jobs:
         echo "All security gates passed"
 
   build:
-    # needs: [security_gate]
+    needs: [security_gate]
     if: true
     permissions:
       id-token: write
